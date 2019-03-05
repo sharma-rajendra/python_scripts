@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import os, sys, datetime, json, pymongo, subprocess
+import os, sys, datetime, json, pymongo, subprocess, tarfile
 from pymongo import MongoClient
 host = "localhost" ##Database Server
 dirName = "/mnt/"  ##Path of backup directory
@@ -21,3 +21,6 @@ for database in val:
     for collection in col:
         command = "mongoexport --host {} --db {} --collection {} --pretty --out {}/{}.json".format(host,database,collection,database,collection)
         os.system(command)
+    tar = tarfile.open("{}.tar".format(database), "w:gz")
+    tar.add(database)
+    tar.close()
